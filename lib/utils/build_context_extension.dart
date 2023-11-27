@@ -2,16 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 extension BuildContextEntension<T> on BuildContext {
-
   bool get isMobile => MediaQuery.of(this).size.width <= 500.0;
 
-  bool get isTablet => MediaQuery.of(this).size.width < 1024.0 && MediaQuery.of(this).size.width >= 650.0;
+  bool get isTablet =>
+      MediaQuery.of(this).size.width < 1024.0 &&
+      MediaQuery.of(this).size.width >= 650.0;
 
-  bool get isSmallTablet => MediaQuery.of(this).size.width < 650.0 && MediaQuery.of(this).size.width > 500.0;
+  bool get isSmallTablet =>
+      MediaQuery.of(this).size.width < 650.0 &&
+      MediaQuery.of(this).size.width > 500.0;
 
   bool get isDesktop => MediaQuery.of(this).size.width >= 1024.0;
 
-  bool get isSmall => MediaQuery.of(this).size.width < 850.0 && MediaQuery.of(this).size.width >= 560.0;
+  bool get isSmall =>
+      MediaQuery.of(this).size.width < 850.0 &&
+      MediaQuery.of(this).size.width >= 560.0;
 
   double get width => MediaQuery.of(this).size.width;
 
@@ -25,7 +30,8 @@ extension BuildContextEntension<T> on BuildContext {
 
   TextStyle? get displaySmall => Theme.of(this).textTheme.displaySmall;
 
-  TextStyle? get headlineLarge => Theme.of(this).textTheme.headlineLarge;
+  TextStyle? get headlineLarge =>
+      Theme.of(this).textTheme.headlineLarge?.copyWith(color: this.primary);
 
   TextStyle? get headlineMedium => Theme.of(this).textTheme.headlineMedium;
 
@@ -41,13 +47,19 @@ extension BuildContextEntension<T> on BuildContext {
 
   TextStyle? get titleTextStyle => Theme.of(this).appBarTheme.titleTextStyle;
 
-  TextStyle? get bodyExtraSmall => bodySmall?.copyWith(fontSize: 10, height: 1.6, letterSpacing: .5);
+  TextStyle? get bodyExtraSmall =>
+      bodySmall?.copyWith(fontSize: 10, height: 1.6, letterSpacing: .5);
 
   TextStyle? get bodyLarge => Theme.of(this).textTheme.bodyLarge;
 
-  TextStyle? get dividerTextSmall => bodySmall?.copyWith(letterSpacing: 0.5, fontWeight: FontWeight.w700, fontSize: 12.0);
+  TextStyle? get dividerTextSmall => bodySmall?.copyWith(
+      letterSpacing: 0.5, fontWeight: FontWeight.w700, fontSize: 12.0);
 
-  TextStyle? get dividerTextLarge => bodySmall?.copyWith(letterSpacing: 1.5, fontWeight: FontWeight.w700, fontSize: 13.0, height: 1.23);
+  TextStyle? get dividerTextLarge => bodySmall?.copyWith(
+      letterSpacing: 1.5,
+      fontWeight: FontWeight.w700,
+      fontSize: 13.0,
+      height: 1.23);
 
   // colors
 
@@ -58,6 +70,8 @@ extension BuildContextEntension<T> on BuildContext {
   Color get primaryColorLight => Theme.of(this).primaryColorLight;
 
   Color get primary => Theme.of(this).colorScheme.primary;
+
+  Color get tertiary => Theme.of(this).colorScheme.tertiary;
 
   Color get onPrimary => Theme.of(this).colorScheme.onPrimary;
 
@@ -71,15 +85,7 @@ extension BuildContextEntension<T> on BuildContext {
 
   Color get background => Theme.of(this).colorScheme.background;
 
-  // custome theme extensions, You must have to create theme extensions first
-  // you can use them with shortcuts as well
-  // Gradient get vertical => Theme.of(this).extension<AppThemeExtension>()!.vertical;
-
-  // Gradient get horizontal => Theme.of(this).extension<AppThemeExtension>()!.horizontal;
-
-  // Color get extraLightGrey => Theme.of(this).extension<AppThemeExtension>()!.extraLightGrey;
-
-  // Color get lightGrey => Theme.of(this).extension<AppThemeExtension>()!.lightGrey;
+  Color get unselectedTab => Colors.white.withOpacity(0.5);
 
   Future<T?> showBottomSheet(
     Widget child, {
@@ -96,7 +102,8 @@ extension BuildContextEntension<T> on BuildContext {
     );
   }
 
-  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(String message) {
+  ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showSnackBar(
+      String message) {
     return ScaffoldMessenger.of(this).showSnackBar(
       SnackBar(
         content: Text(message),
@@ -106,16 +113,17 @@ extension BuildContextEntension<T> on BuildContext {
     );
   }
 
-  navToview (Widget widget) {
+  navToview(Widget widget) {
     Navigator.of(this).push(MaterialPageRoute(builder: (context) => widget));
   }
 
-  navBack () {
+  navBack() {
     Navigator.of(this).pop();
   }
 
-  navToAndReplace (Widget widget) {
-    Navigator.of(this).pushReplacement(MaterialPageRoute(builder: (context) => widget));
+  navToAndReplace(Widget widget) {
+    Navigator.of(this)
+        .pushReplacement(MaterialPageRoute(builder: (context) => widget));
   }
 
   String formatDate(DateTime date) {
@@ -127,6 +135,36 @@ extension BuildContextEntension<T> on BuildContext {
     final formatter = DateFormat('HH:mm');
     return formatter.format(date);
   }
+
+  String lastConnectionDate(DateTime date) {
+    // Obtenir la date actuelle
+    final now = DateTime.now();
+
+    // Calculer la différence entre la date actuelle et la date passée
+    final difference = now.difference(date);
+
+    // Si la différence est inférieure à 24 heures
+    if (difference.inHours < 24) {
+      // Retourner l'heure
+      return DateFormat("HH:mm").format(date);
+    } else if (difference.inHours < 48) {
+      // Retourner "Hier"
+      return "Hier";
+    } else {
+      // Retourner la date
+      return DateFormat("dd/MM/yyyy").format(date);
+    }
+  }
+
+  // custome theme extensions, You must have to create theme extensions first
+  // you can use them with shortcuts as well
+  // Gradient get vertical => Theme.of(this).extension<AppThemeExtension>()!.vertical;
+
+  // Gradient get horizontal => Theme.of(this).extension<AppThemeExtension>()!.horizontal;
+
+  // Color get extraLightGrey => Theme.of(this).extension<AppThemeExtension>()!.extraLightGrey;
+
+  // Color get lightGrey => Theme.of(this).extension<AppThemeExtension>()!.lightGrey;
 
   // Future<bool?> showToast(String message) {
   //   return Fluttertoast.showToast(
